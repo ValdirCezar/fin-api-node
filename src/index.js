@@ -113,6 +113,14 @@ app.put("/account", verifyIfExistsAccountCPF, (req, res) => {
 })
 
 /**
+ * GET to find an account by CPF
+ */
+app.get("/account", verifyIfExistsAccountCPF, (req, res) => {
+  const { customer } = request;
+  return res.json(customer);
+})
+
+/**
  * Start server
  */
 app.listen(PORT, () => {
