@@ -4,5 +4,8 @@
   "description": "Node API with typescript",
   "main": "index.js",
   "author": "Valdir Cezar",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
