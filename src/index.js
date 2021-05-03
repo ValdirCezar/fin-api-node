@@ -69,6 +69,18 @@ app.get("/statement", verifyIfExistsAccountCPF, (req, res) => {
 })
 
 /**
+ * GET statements of a customer by date
+ */
+app.get("/statement/date", (req, res) => {
+  const { customer } = request;
+  const { date } = req.query;
+  const dateFormat = new Date(date + " 00:00");
+
+  const statement = customer.statement.filter((statement) => statement.created_at.toDateString() === new Date(dateFormat).toDateString())
+  return res.json(statement)
+})
+
+/**
  * POST to make a deposity in an account
  */
 app.post("/deposit", verifyIfExistsAccountCPF, (req, res) => {
@@ -85,7 +97,7 @@ app.post("/deposit", verifyIfExistsAccountCPF, (req, res) => {
 
   customer.statement.push(statementOperation);
 
-  return res.status(201).json({message: "Successful deposit"})
+  return res.status(201).json({ message: "Successful deposit" })
 })
 
 /**
