@@ -1,0 +1,8 @@
+{
+  "name": "ignite",
+  "version": "1.0.0",
+  "description": "Node API with typescript",
+  "main": "index.js",
+  "author": "Valdir Cezar",
+  "license": "MIT"
+}
