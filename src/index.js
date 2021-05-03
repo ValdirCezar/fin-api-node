@@ -101,6 +101,18 @@ app.post("/deposit", verifyIfExistsAccountCPF, (req, res) => {
 })
 
 /**
+ * PUT to update data from account
+ */
+app.put("/account", verifyIfExistsAccountCPF, (req, res) => {
+  const { name } = req.body;
+  const { customer } = request;
+
+  customer.name = name;
+
+  return res.status(201).json({ message: "Account updated" })
+})
+
+/**
  * Start server
  */
 app.listen(PORT, () => {
