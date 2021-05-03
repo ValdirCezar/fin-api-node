@@ -21,12 +21,16 @@ app.use(express.json());
  */
 function verifyIfExistsAccountCPF(req, res, next) {
   const { cpf } = req.headers;
-  const customer = customers.find((customer) => customer.cpf === cpf);
+  const customer = customers.map((item) => item.cpf === cpf);
+
+  // Case customer exists return next() else return 404
+  if (!customer) {
+    return res.status(404).json({ message: "CPF not found" })
+  }
 
   request.customer = customer;
 
-  // Case customer exists return next() else return 404
-  return customer ? next() : res.status(404).json({ message: "CPF not found" })
+  return next();
 }
 
 
@@ -41,8 +45,8 @@ app.post("/account", (req, res) => {
   const { cpf, name } = req.body;
 
   // Mapping an item in vector like with CPF informed on body
-  customers.map(item => {
-    if (item.cpf === req.body.cpf) {
+  customers.map((item) => {
+    if (item.cpf === cpf) {
       // Case CPF already exists return an error
       return res.status(400).json({ message: "CPF already exists!" });
     }
@@ -118,6 +122,23 @@ app.put("/account", verifyIfExistsAccountCPF, (req, res) => {
 app.get("/account", verifyIfExistsAccountCPF, (req, res) => {
   const { customer } = request;
   return res.json(customer);
+})
+
+/**
+ * GET to find all accounts
+ */
+app.get("/accounts", (req, res) => {
+  return res.json(customers);
+})
+
+/**
+ * DELETE to delete an account by CPF
+ */
+app.delete("/account", verifyIfExistsAccountCPF, (req, res) => {
+  const { customer } = request;
+
+  customers.splice(customer, 1);
+  return res.status(200).json(customers)
 })
 
 /**
