@@ -19,7 +19,7 @@ app.use(express.json());
  * Verify if exists an account with the
  * CPF informed in headers
  */
-function verifyIfExistsAccoubtCPF(req, res, next) {
+function verifyIfExistsAccountCPF(req, res, next) {
   const { cpf } = req.headers;
   const customer = customers.find((customer) => customer.cpf === cpf);
 
@@ -63,9 +63,29 @@ app.post("/account", (req, res) => {
 /**
  * GET to read a statement of account
  */
-app.get("/statement", verifyIfExistsAccoubtCPF, (req, res) => {
+app.get("/statement", verifyIfExistsAccountCPF, (req, res) => {
   const { customer } = request;
   return res.json({ statements: customer.statement })
+})
+
+/**
+ * POST to make a deposity in an account
+ */
+app.post("/deposit", verifyIfExistsAccountCPF, (req, res) => {
+  const { description, amount } = req.body;
+  const { customer } = request;
+
+  const statementOperation = {
+    id: uuidv4(),
+    description,
+    amount,
+    created_at: new Date(),
+    type: "credit"
+  };
+
+  customer.statement.push(statementOperation);
+
+  return res.status(201).json({message: "Successful deposit"})
 })
 
 /**
