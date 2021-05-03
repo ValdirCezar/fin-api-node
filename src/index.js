@@ -36,6 +36,14 @@ app.post("/account", (req, res) => {
   return res.status(201).json({ message: "Account created" });
 })
 
+// ----- GET TO VIEW AN STATEMENT -----
+app.get("/statement/:cpf", (req, res) => {
+  const { cpf } = req.params;
+  const customer = customers.find(customer => customer.cpf === cpf);
+
+  return customer ? res.json({ statements: customer.statement }) : res.status(404).json({ message: "CPF not found!" });
+})
+
 // ----- START SERVER -----
 app.listen(PORT, () => {
   console.log("Server is running on PORT: 3000");
